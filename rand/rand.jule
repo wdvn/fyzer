@@ -1,0 +1,26 @@
+//The implementation of https://en.wikipedia.org/wiki/Permuted_congruential_generator
+
+use "std/time"
+struct Rand {}
+
+static mut state:u64=0x4d595df4d0f33173 | u64(time::Now().Unix())
+static multiplier:u64 = 6364136223846793005;
+static increment:u64  = 1442695040888963407;    
+
+fn rotr32(x:u32,r:u64):u32{
+    ret x >> r | x << (-r & 31)
+}
+
+impl Rand{
+    static fn U32(): u32{
+        let mut x=state
+        let count = (x>>59)
+        state = x * multiplier + increment
+        x^=x>>18
+        ret rotr32(u32(x >> 27), count)
+    }
+  
+    static fn RangeU32(min:u32, max:u32):u32{
+        
+    }
+}

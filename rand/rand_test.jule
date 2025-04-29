@@ -1,0 +1,25 @@
+use "std/testing"
+use "std/sync"
+use "std/fmt"
+
+#test
+fn testRandU32(t: &testing::T){
+    let mut i=0
+    let mut wg = sync::WaitGroup.New()
+    wg.Add(100)
+    
+    compare:=fn(mut wg: &sync::WaitGroup){
+        defer {wg.Done()}
+        a:=Rand.U32()
+        b:=Rand.U32()
+        fmt::Println(a,b)
+        if a == b{
+            panic("Random u32 failed")
+        }
+    }
+    
+    for i<100;i++{
+        co compare(wg)
+    }
+    wg.Wait()
+}
