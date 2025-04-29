@@ -1,6 +1,7 @@
-//The implementation of https://en.wikipedia.org/wiki/Permuted_congruential_generator
+//The clone from https://github.com/gtank/isaac/blob/master/isaac.go
 
 use "std/time"
+use "std/math"
 struct Rand {}
 
 static mut state:u64=0x4d595df4d0f33173 | u64(time::Now().Unix())
@@ -10,7 +11,11 @@ static increment:u64  = 1442695040888963407;
 fn rotr32(x:u32,r:u64):u32{
     ret x >> r | x << (-r & 31)
 }
-
+fn rangeOne(): f32{
+    a:=f64(Rand.U32())
+    b:=f64(Rand.U32())
+    ret f32(math::Min(a,b)/math::Max(a,b))
+}
 impl Rand{
     static fn U32(): u32{
         let mut x=state
@@ -19,8 +24,154 @@ impl Rand{
         x^=x>>18
         ret rotr32(u32(x >> 27), count)
     }
-  
-    static fn RangeU32(min:u32, max:u32):u32{
-        
+
+    static fn RangeU32( min:u32, max:u32):u32{
+        ret min+ u32(rangeOne()*f32(max-min))
     }
+}
+
+struct ISAAC {
+   mut randrsl: [256]u32
+   mut randcnt: u32
+    
+   mut mm: [256]u32
+   mut aa: u32
+   mut bb: u32
+   mut cc: u32
+}
+fn mix(mut a: u32,mut  b: u32,mut  c: u32,mut  d: u32,mut  e: u32,mut  f: u32,mut  g: u32,mut  h: u32) :(u32, u32, u32, u32, u32, u32, u32, u32) {
+	a ^= b << 11
+	d += a
+	b += c
+	b ^= c >> 2
+	e += b
+	c += d
+	c ^= d << 8
+	f += c
+	d += e
+	d ^= e >> 16
+	g += d
+	e += f
+	e ^= f << 10
+	h += e
+	f += g
+	f ^= g >> 4
+	a += f
+	g += h
+	g ^= h << 8
+	b += g
+	h += a
+	h ^= a >> 9
+	c += h
+	a += b
+	ret a, b, c, d, e, f, g, h
+}
+impl ISAAC {
+    fn isaac(self){
+        self.cc = self.cc + 1
+        self.bb = self.bb + self.cc
+        
+        let mut i =0
+        for i<256;i++{
+            x:=self.mm[i]
+            match i%4{
+            |0:
+                self.aa =self.aa^(self.aa<<13)
+            |1:
+                self.aa =self.aa^(self.aa>>6)
+            |2:
+                self.aa =self.aa^(self.aa<<2)
+            |3:
+                self.aa =self.aa^(self.aa>>16)
+            }
+            self.aa = self.mm[(i+128)%256] + self.aa
+            y := self.mm[(x>>2)%256] + self.aa + self.bb
+            self.mm[i] = y
+            self.bb = self.mm[(y>>10)%256] + x
+            self.randrsl[i] = self.bb
+        }
+    }
+    
+    fn randInit(self,flag: bool) {
+    	let mut  a:u32=0
+    	let mut  b:u32=0
+    	let mut  c:u32=0 
+    	let mut  d:u32=0 
+    	let mut  e:u32=0
+    	let mut  f:u32=0
+    	let mut  g:u32=0
+    	let mut  h:u32=0
+    	a, b, c, d, e, f, g, h = 0x9e3779b9, 0x9e3779b9, 0x9e3779b9, 0x9e3779b9, 0x9e3779b9, 0x9e3779b9, 0x9e3779b9, 0x9e3779b9
+    
+        mut i := 0
+    	for i < 4; i++ {
+    		a, b, c, d, e, f, g, h = mix(a, b, c, d, e, f, g, h)
+    	}
+        i=0    
+    	for i < 256; i += 8 { 
+    		if flag { 
+    			a += self.randrsl[i]
+    			b += self.randrsl[i+1]
+    			c += self.randrsl[i+2]
+    			d += self.randrsl[i+3]
+    			e += self.randrsl[i+4]
+    			f += self.randrsl[i+5]
+    			g += self.randrsl[i+6]
+    			h += self.randrsl[i+7]
+    		}
+    		a, b, c, d, e, f, g, h = mix(a, b, c, d, e, f, g, h)
+    		self.mm[i] = a
+    		self.mm[i+1] = b
+    		self.mm[i+2] = c
+    		self.mm[i+3] = d
+    		self.mm[i+4] = e
+    		self.mm[i+5] = f
+    		self.mm[i+6] = g
+    		self.mm[i+7] = h
+    	}
+    
+    	if flag { 
+    	    i = 0
+    		for  i < 256; i += 8 {
+    			a += self.mm[i]
+    			b += self.mm[i+1]
+    			c += self.mm[i+2]
+    			d += self.mm[i+3]
+    			e += self.mm[i+4]
+    			f += self.mm[i+5]
+    			g += self.mm[i+6]
+    			h += self.mm[i+7]
+    			a, b, c, d, e, f, g, h = mix(a, b, c, d, e, f, g, h)
+    			self.mm[i] = a
+    			self.mm[i+1] = b
+    			self.mm[i+2] = c
+    			self.mm[i+3] = d
+    			self.mm[i+4] = e
+    			self.mm[i+5] = f
+    			self.mm[i+6] = g
+    			self.mm[i+7] = h
+    		}
+    	}
+    
+    	self.isaac()      
+    	self.randcnt = 256 
+    }
+    
+    fn Rand(self): u32{
+        self.randcnt--
+        number := self.randrsl[self.randcnt]
+        if self.randcnt == 0 {
+            self.isaac()
+            self.randcnt = 256
+        }
+        ret number
+    }
+    
+    //TODO: implement seed
+}
+static GlobIsaac = ISAAC{} 
+
+fn IRand():u32{
+    GlobIsaac.randInit(true)
+    ret GlobIsaac.Rand()
 }
