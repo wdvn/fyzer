@@ -1,0 +1,41 @@
+use "std/testing"
+use "std/encoding/json"
+use "std/os"
+struct trieTc{
+ W:str
+            E: bool  
+}
+struct testTrieType{
+       Words: []str     //`json:"words"`
+       Search: []trieTc //`json:"search_cases"`
+       Prefix: []trieTc //`json:"prefix_cases"`
+    }
+#test
+fn testTrie(t: &testing::T){
+    trie:= Trie.New()
+    
+    words:=[]str(["apple", "apricot", "banana", "bat"])
+    for _,w in words{
+        trie.Insert(w)
+    }
+    
+    let mut cases = &testTrieType{}
+    b:= os::ReadFile("../test/trie.json") else{
+        println(error)
+        ret
+    }
+    if b==nil{
+       ret
+    }
+    json::Decode(b,cases) else{
+       println(error)
+    }
+    
+    for _,w in cases.Search{
+        println(w.W)
+        t.Assert(trie.Search(w.W)==w.E," Failed")
+    }
+    for _,w in cases.Prefix{
+        t.Assert(trie.IsPrefix(w.W)==w.E," Failed")
+    }
+}

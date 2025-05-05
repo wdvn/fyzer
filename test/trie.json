@@ -1,0 +1,56 @@
+{
+  "words": [
+    "apple",
+    "apricot",
+    "banana",
+    "bat"
+  ],
+  "search_cases": [
+    {
+      "word": "apple",
+      "expected": true
+    },
+    {
+      "word": "ap",
+      "expected": false
+    },
+    {
+      "word": "banana",
+      "expected": true
+    },
+    {
+      "word": "orange",
+      "expected": false
+    },
+    {
+      "word": "bat",
+      "expected": true
+    },
+    {
+      "word": "b",
+      "expected": false
+    }
+  ],
+  "prefix_cases": [
+    {
+      "word": "ap",
+      "expected": true
+    },
+    {
+      "word": "ban",
+      "expected": true
+    },
+    {
+      "word": "or",
+      "expected": false
+    },
+    {
+      "word": "b",
+      "expected": true
+    },
+    {
+      "word": "a",
+      "expected": true
+    }
+  ]
+}
