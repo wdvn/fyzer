@@ -1,53 +1,56 @@
-
-
 struct TrieNode {
-    mut children: map[rune]&TrieNode
-    mut isWord: bool
+	mut children: map[rune]&TrieNode
+	mut isWord:   bool
 }
+
 fn newTrieNode(): &TrieNode {
-    ret &TrieNode{
-        children: (map[rune]&TrieNode)({}),
-        isWord: false,   
-    }
+	ret &TrieNode{
+		children: (map[rune]&TrieNode)({}),
+		isWord: false,
+	}
 }
-struct Trie{mut root: &TrieNode}
+
+struct Trie {
+	mut root: &TrieNode
+}
+
 impl Trie {
-    static fn New(): &Trie{
-        ret &Trie{
-            root: newTrieNode()
-        }
-    }
-    fn Insert(self, s: str){
-       mut node := self.root
-        for _, char in s {
-           let (_, exists) = node.children[char]
-            if !exists {
-                node.children[char] = newTrieNode()
-            }
-            node = node.children[char]
-        }
-        node.isWord = true
-    }
-    fn Search(self, s: str): bool {
-        mut node := self.root
-        for _, char in s {
-            let (_, exists) = node.children[char]
-            if !exists {
-                ret false
-            }
-            node = node.children[char]
-        }
-        ret node != nil && node.isWord
-    }
-    fn IsPrefix(self, s:str): bool {
-        mut node := self.root
-        for _, char in s {
-            let (_, exists) = node.children[char]
-            if !exists {
-                ret false
-            }
-            node = node.children[char]
-        }
-        ret node != nil
-    }
+	static fn New(): &Trie {
+		ret &Trie{
+			root: newTrieNode(),
+		}
+	}
+	fn Insert(self, s: str) {
+		mut node := self.root
+		for _, char in s {
+			let (_, exists) = node.children[char]
+			if !exists {
+				node.children[char] = newTrieNode()
+			}
+			node = node.children[char]
+		}
+		node.isWord = true
+	}
+	fn Search(self, s: str): bool {
+		mut node := self.root
+		for _, char in s {
+			let (_, exists) = node.children[char]
+			if !exists {
+				ret false
+			}
+			node = node.children[char]
+		}
+		ret node != nil && node.isWord
+	}
+	fn IsPrefix(self, s: str): bool {
+		mut node := self.root
+		for _, char in s {
+			let (_, exists) = node.children[char]
+			if !exists {
+				ret false
+			}
+			node = node.children[char]
+		}
+		ret node != nil
+	}
 }

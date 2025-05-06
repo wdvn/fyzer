@@ -1,44 +1,44 @@
-use "std/testing"
-use "std/sync"
 use "std/fmt"
+use "std/sync"
+use "std/testing"
 
 #test
-fn testRandU32(t: &testing::T){
-    let mut i=0
-    let mut wg = sync::WaitGroup.New()
-    wg.Add(100)
-    
-    compare:=fn(mut wg: &sync::WaitGroup){
-        defer {wg.Done()}
-        a:=Rand.U32()
-        b:=Rand.U32()
-        if a == b{
-            panic("Random u32 failed")
-        }
-    }
-    
-    for i<100;i++{
-        co compare(wg)
-    }
-    wg.Wait()
+fn testRandU32(t: &testing::T) {
+	let mut i = 0
+	let mut wg = sync::WaitGroup.New()
+	wg.Add(100)
+
+	compare := fn(mut wg: &sync::WaitGroup) {
+		defer { wg.Done() }
+		a := Rand.U32()
+		b := Rand.U32()
+		if a == b {
+			panic("Random u32 failed")
+		}
+	}
+
+	for i < 100; i++ {
+		co compare(wg)
+	}
+	wg.Wait()
 }
 
 #test
-fn testRangeU32(t: &testing::T){
-    let mut arr=make([]u32,0,100) 
-    let mut i=0
-    for i<100;i++{
-        arr=append(arr, Rand.RangeU32(0,10))
-    }
-    println(arr)
+fn testRangeU32(t: &testing::T) {
+	let mut arr = make([]u32, 0, 100)
+	let mut i = 0
+	for i < 100; i++ {
+		arr = append(arr, Rand.RangeU32(0, 10))
+	}
+	println(arr)
 }
 
 #test
-fn testRangeInt(t: &testing::T){
-    let mut arr=make([]int,0,100) 
-    let mut i=0
-    for i<100;i++{
-        arr=append(arr, Rand.RangeInt(-10,10))
-    }
-    println(arr)
+fn testRangeInt(t: &testing::T) {
+	let mut arr = make([]int, 0, 100)
+	let mut i = 0
+	for i < 100; i++ {
+		arr = append(arr, Rand.RangeInt(-10, 10))
+	}
+	println(arr)
 }
