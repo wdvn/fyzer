@@ -1,3 +1,4 @@
+use "std/encoding"
 use "std/encoding/json"
 use "std/os"
 use "std/testing"
@@ -13,14 +14,50 @@ struct testTrieType {
 	Prefix: []trieTc //`json:"prefix_cases"`
 }
 
+impl encoding::JSONDecoder for testTrieType {
+	fn DecodeJSON(mut self, data: []byte)! {
+		mut mapJSON := json::Object{}
+		json::Decode(data, mapJSON) else { error(error) }
+		mut words, _ := mapJSON["words"]
+		if words != nil {
+			arr := words.(json::Array)
+			self.Words = make([]str, 0, len(arr))
+			for _, word in arr {
+				self.Words = append(self.Words, str(word.(json::String)))
+			}
+		}
+		mut search, _ := mapJSON["search_cases"]
+		if search != nil {
+			arr := search.(json::Array)
+			self.Search = make([]trieTc, 0, len(arr))
+			for _, word in arr {
+				w := word.(json::Object)["word"]
+				e := word.(json::Object)["expected"]
+				self.Search = append(self.Search, trieTc{
+					W: str(w.(json::String)),
+					E: bool(e.(json::Bool)),
+				})
+			}
+		}
+		mut prefixes, _ := mapJSON["prefix_cases"]
+		if prefixes != nil {
+			arr := prefixes.(json::Array)
+			self.Prefix = make([]trieTc, 0, len(arr))
+			for _, word in arr {
+				w := word.(json::Object)["word"]
+				e := word.(json::Object)["expected"]
+				self.Prefix = append(self.Prefix, trieTc{
+					W: str(w.(json::String)),
+					E: bool(e.(json::Bool)),
+				})
+			}
+		}
+	}
+}
+
 #test
 fn testTrie(t: &testing::T) {
 	trie := Trie.New()
-
-	words := []str(["apple", "apricot", "banana", "bat"])
-	for _, w in words {
-		trie.Insert(w)
-	}
 
 	let mut cases = &testTrieType{}
 	b := os::ReadFile("../test/trie.json") else {
@@ -33,9 +70,10 @@ fn testTrie(t: &testing::T) {
 	json::Decode(b, cases) else {
 		println(error)
 	}
-
+	for _, w in cases.Words {
+		trie.Insert(w)
+	}
 	for _, w in cases.Search {
-		println(w.W)
 		t.Assert(trie.Search(w.W) == w.E, " Failed")
 	}
 	for _, w in cases.Prefix {
