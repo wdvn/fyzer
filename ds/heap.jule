@@ -1,0 +1,31 @@
+struct Heap{
+   mut arr: []any
+   // less: func (i:int, j: int) bool
+}
+
+impl Heap{
+    fn Push(x: any){
+    ret nil
+    }
+    
+    fn Pop(): any{
+    ret nil
+    }
+    
+    fn Swap(*self,i:int,j:int){
+        self.arr[i],self.arr[j] = self.arr[j],self.arr[i]
+    }
+    
+    fn Less(*self,i:int,j:int): bool{
+        ret false
+    }
+    
+    fn Len(*self):int{
+        ret len(self.arr)
+    }
+    
+    fn Insert(*self, item:any){
+        mut self.arr=append(self.arr,item)
+        let mut index = self.Len()       
+    }
+}

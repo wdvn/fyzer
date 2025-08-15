@@ -14,13 +14,13 @@ struct testTrieType {
 	Prefix: []trieTc //`json:"prefix_cases"`
 }
 
-impl encoding::JSONDecoder for testTrieType {
-	fn DecodeJSON(mut self, data: []byte)! {
+impl encoding::TextDecoder for testTrieType {
+	fn DecodeText(mut *self, data: []byte)! {
 		mut mapJSON := json::Object{}
-		json::Decode(data, mapJSON) else { error(error) }
+		json::Decode(data, &mapJSON) else { error(error) }
 		mut words, _ := mapJSON["words"]
 		if words != nil {
-			arr := words.(json::Array)
+			mut arr := words.(json::Array)
 			self.Words = make([]str, 0, len(arr))
 			for _, word in arr {
 				self.Words = append(self.Words, str(word.(json::String)))
@@ -67,7 +67,7 @@ fn testTrie(t: &testing::T) {
 	if b == nil {
 		ret
 	}
-	json::Decode(b, cases) else {
+	json::Decode(b, &cases) else {
 		println(error)
 	}
 	for _, w in cases.Words {
