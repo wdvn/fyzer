@@ -4,7 +4,9 @@ use "std/fmt"
 #test
 fn testHeap(t: &testing::T){
     let mut mySlice = [90, 32, 6, 53]
-    h:= NewHeap(mySlice)
+    let mut lessFn: fn(arr: []int, x: int, y: int):bool
+    lessFn = fn|arr,i,j| arr[i] < arr[j]
+    h:= NewHeap(mySlice,lessFn)
     fmt::Println(mySlice)
     fmt::Println(h.arr)
     h.Push(1)
