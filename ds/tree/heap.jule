@@ -2,7 +2,7 @@
 - https://www.geeksforgeeks.org/dsa/introduction-to-min-heap-data-structure/
 - https://github.com/golang/go/blob/release-branch.go1.25/src/container/heap/heap.go
 */
-//type LessFn = func (int,  int): bool 
+//type LessFn = fn [T:immutable|mutable]([]T,int,  int): bool 
 struct Heap[T, LessFn]{
    mut arr: []T
    less: LessFn
@@ -88,7 +88,7 @@ impl Heap{
     }
 }
 
-fn NewHeap[T:ordered, LessFn: fn([]T,int,int):bool](mut arr: []T, less: LessFn):&Heap[T,LessFn] {
+fn NewHeap[T:immutable|mutable, L: fn([]T,int,int):bool](mut arr: []T, less: LessFn):&Heap[T,LessFn] {
     mut h:=&Heap[T,LessFn]{arr:arr,less:less}
     h.heapify()
     ret h

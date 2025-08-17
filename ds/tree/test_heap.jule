@@ -3,7 +3,7 @@ use "std/fmt"
 
 #test
 fn testHeap(t: &testing::T){
-    let mut mySlice = [90, 32, 6, 53]
+    let mut mySlice:[]int = [90, 32, 6, 53]
     let mut lessFn: fn(arr: []int, x: int, y: int):bool
     lessFn = fn|arr,i,j| arr[i] < arr[j]
     h:= NewHeap(mySlice,lessFn)
@@ -12,6 +12,19 @@ fn testHeap(t: &testing::T){
     h.Push(1)
     fmt::Println(h.arr)
     
+    h.Pop()
+    fmt::Println(h.arr)
+}
+struct Foo{
+       v: int
+}
+#test
+fn testHeapWithStruct(t: &testing::T){
+    
+    let mut items: []Foo=[Foo{1},Foo{7},Foo{5},Foo{4}]
+    let lessFn: fn(arr: []Foo,i:int,j:int):bool = fn|arr,i,j| arr[i].v < arr[j].v
+    h:=NewHeap(items, lessFn)
+    fmt::Println(h.arr)
     h.Pop()
     fmt::Println(h.arr)
 }
