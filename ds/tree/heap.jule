@@ -1,3 +1,8 @@
+/* Reference: 
+- https://www.geeksforgeeks.org/dsa/introduction-to-min-heap-data-structure/
+- https://github.com/golang/go/blob/release-branch.go1.25/src/container/heap/heap.go
+*/
+
 struct Heap[T]{
    mut arr: []T
    // less: func (i:int, j: int) bool
