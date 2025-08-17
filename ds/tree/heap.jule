@@ -9,14 +9,13 @@ impl Heap{
         let top = self.arr[0]
         let last = self.Len() -1
         
-        // move top item to the last of array
+        // move top item to the last index of array
         self.Swap(0,last)
         
         // verify the root node of the heap
         self.down(0,last)
         
-        // remove the last item
-        
+        // remove the last item of array
         self.arr = self.arr[:last]
         ret top
     }
