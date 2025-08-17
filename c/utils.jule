@@ -1,11 +1,13 @@
 cpp type char: byte
 type Char = cpp.char
+cpp type Void: uintptr
+type Void = cpp.Void
 
-unsafe fn strToCharPtr(s: str): *cpp.char {
+unsafe fn StrToCharPtr(s: str): *cpp.char {
 	ret (*cpp.char)(&s[0])
 }
 
-unsafe fn ptrCharToStr(c: *cpp.char): str {
+unsafe fn PtrCharToStr(c: *cpp.char): str {
 	if c == nil {
 		ret ""
 	}

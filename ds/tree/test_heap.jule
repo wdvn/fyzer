@@ -1,0 +1,15 @@
+use "std/testing"
+use "std/fmt"
+
+#test
+fn testHeap(t: &testing::T){
+    let mut mySlice = [90, 32, 6, 53]
+    h:= NewHeap(mySlice)
+    fmt::Println(mySlice)
+    fmt::Println(h.arr)
+    h.Push(1)
+    fmt::Println(h.arr)
+    
+    h.Pop()
+    fmt::Println(h.arr)
+}

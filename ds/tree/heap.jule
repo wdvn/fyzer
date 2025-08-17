@@ -1,15 +1,24 @@
-struct Heap{
-   mut arr: []any
+struct Heap[T]{
+   mut arr: []T
    // less: func (i:int, j: int) bool
 }
 
 impl Heap{
-    fn Push(x: any){
-    ret nil
-    }
-    
-    fn Pop(): any{
-    ret nil
+    //function Pop: cut the top item of the heap
+    fn Pop(*self): T{
+        let top = self.arr[0]
+        let last = self.Len() -1
+        
+        // move top item to the last of array
+        self.Swap(0,last)
+        
+        // verify the root node of the heap
+        self.down(0,last)
+        
+        // remove the last item
+        
+        self.arr = self.arr[:last]
+        ret top
     }
     
     fn Swap(*self,i:int,j:int){
@@ -17,15 +26,65 @@ impl Heap{
     }
     
     fn Less(*self,i:int,j:int): bool{
-        ret false
+        ret self.arr[i] < self.arr[j]
     }
     
     fn Len(*self):int{
         ret len(self.arr)
     }
     
-    fn Insert(*self, item:any){
-        mut self.arr=append(self.arr,item)
-        let mut index = self.Len()       
+    // function Push: add new item to heap
+    fn Push(*self, item:T){
+        // Add the new item to end of hea(array)
+        self.arr = append(self.arr, item)
+        let mut index = self.Len() - 1
+       
+        // Compare the new item with it's parent and swap if necessary
+        for index > 0 && !self.Less((index-1)/2,index){
+            self.Swap((index-1)/2,index)
+            index = (index-1)/2
+        }
     }
+    
+    // function down: check the valid of node is a min heap from child -> parent
+    // i: position of node to check valid
+    // n: length of array
+    fn down(*self, i:int, n:int){
+        //implement of complete tree
+        mut p:=i
+        mut l:=2*i+1
+        mut r:=2*i+2
+        
+        // check left child with it's parent
+        // if left < parent => swap(left,parent)
+        if 	l<n && self.Less(l,p){
+            p=l
+        }
+        
+        // check right child with it's parent
+        // if right < parent => swap(right,parent)
+        if 	r<n && self.Less(r,p){
+            p=r
+        }
+        
+        // if current node is not valid => execute swap & recheck again
+        if p!=i{
+            self.Swap(i,p)
+            self.down(p,n)
+        }
+    }
+    
+    fn heapify(*self){
+        n := self.Len()
+        mut i := n/2 - 1
+        for  i >= 0; i-- {
+            self.down(i, n)
+        }
+    }
+}
+
+fn NewHeap[T:ordered](mut arr: []T):&Heap[T] {
+    mut h:=&Heap[T]{arr:arr}
+    h.heapify()
+    ret h
 }
