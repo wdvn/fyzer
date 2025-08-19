@@ -1,0 +1,35 @@
+struct Node[T] {
+    mut next: &Node[T]
+    Val: T
+}
+struct Stack[T] {
+    mut head: &Node[T]
+    mut size: int
+}
+
+impl Stack {
+    fn Push(*self, item: T){
+        mut next := &Node[T]{next:self.head,Val:item}
+        unsafe {self.head = next}
+        self.size++
+    }
+    
+    fn Pop(*self): T{
+       mut node := self.head
+       unsafe { self.head = node.next }
+        self.size--
+        ret node.Val
+    }
+    
+    fn Size(*self): int{
+        ret self.size
+    }
+}
+
+fn NewStack[T](arr:[]T): &Stack[T]{
+    mut stack:= &Stack[T]{nil,0}
+    for _,item in arr{
+        stack.Push(item)
+    }
+    ret stack
+}

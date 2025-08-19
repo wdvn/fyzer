@@ -1,0 +1,13 @@
+
+use "std/testing"
+use "std/fmt"
+#test 
+fn testStack(t: &testing::T){
+    let arr = [1,2,3,4,5]
+    q:= NewStack[int](arr)
+    let mut n = 5
+    for q.Size()>0{
+        t.Assert(q.Pop()==n,"the result is not match the expected")
+        n--
+    }
+}
