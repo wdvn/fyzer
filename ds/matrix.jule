@@ -1,0 +1,13 @@
+
+
+struct Matrix[T] {
+    matrix: [][]T
+}
+
+fn NewMatrix[T](n:int,m:int): &Matrix[T]{
+    mut let matrix = make([][]T,0,n)
+    for _ in n{
+        matrix = append(matrix ,make([]T,0,m))
+    }
+    ret matrix
+}
