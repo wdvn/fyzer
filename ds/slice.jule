@@ -1,0 +1,47 @@
+
+fn CloneSlice[T](arr: []T): []T{
+    mut out:= make([]T,0,len(arr))
+    out=append(out,arr...)
+    ret out
+}
+
+struct Set[T]{
+    mut v: []T
+    mut mp: map[string]any
+}
+
+fn NewSet[T:any](arr: []T): &Set[T]{
+    let mut arr = make([]T,0,len(arr))
+    let mut mp:map[string]T ={}
+    let mut set = &Set[T]{arr,mp}
+    for _,item in arr {
+        if self.Contain(item){
+            self.Push(item)
+        }
+    }
+    ret set
+}
+
+impl Set{
+    // TODO: handle if T has String() function
+    fn key(*self, item: T):string{
+        ret fmt::Sprint(item)
+    }
+    fn Contain(*self, item:T):bool{
+        k:= self.key(item)
+        let (_,ok)=self.mp[k]
+        ret ok
+    }
+
+    fn Push(*self,item:T){
+        if !self.Contain(item){
+            self.v= append(self.v,item)
+            k:= self.key(item)
+            self.mp[k]=nil
+        }
+    }
+    
+    fn Get(*self, i: int): T{
+        ret self.v[i]
+    }
+}

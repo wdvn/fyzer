@@ -1,0 +1,11 @@
+use "std/testing"
+
+#test
+fn testSet(t: &testing::T){
+    let v= [1,2,1,3,4]
+    set:= NewSet(v)
+    let mut i = 0
+    for i<3;i++{
+        t.Assert(i+1 == set.Get(i),"the test case has not match")
+    }
+}

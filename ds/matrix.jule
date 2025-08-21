@@ -1,13 +1,30 @@
-
+use "std/fmt"
 
 struct Matrix[T] {
     matrix: [][]T
 }
 
 fn NewMatrix[T](n:int,m:int): &Matrix[T]{
-    mut let matrix = make([][]T,0,n)
-    for _ in n{
-        matrix = append(matrix ,make([]T,0,m))
+    let mut matrix = make([][]T,0,n)
+    let mut i=0
+    for i<n;i++{
+        matrix = append(matrix ,make([]T,m,m))
     }
-    ret matrix
+    ret &Matrix[T]{matrix}
+}
+
+impl Matrix {
+    fn Print(*self) {
+        for _,row in self.matrix{
+            fmt::Println(row)
+        }
+    }
+    
+    fn Clone(*self): &Matrix[T] {
+        let mut result = make([][]T,0,len(self.matrix))
+    	for _, row in self.matrix {
+    		result = append(result, CloneSlice(row))
+    	}
+    	ret &Matrix[T]{result}
+    }
 }

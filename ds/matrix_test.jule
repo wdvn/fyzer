@@ -1,0 +1,7 @@
+use "std/testing"
+
+#test
+fn testInitMatrix(t: &testing::T){
+    mx:= NewMatrix[int](4,4)
+    mx.Print()
+}
