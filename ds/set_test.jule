@@ -8,4 +8,6 @@ fn testSet(t: &testing::T){
     for i<3;i++{
         t.Assert(i+1 == set.Get(i),"the test case has not match")
     }
+    set.Push(5)
+    t.Assert(5 == set.Get(4), "the test case has not match")
 }

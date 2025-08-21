@@ -1,0 +1,45 @@
+use "std/fmt"
+
+struct Set[T]{
+    mut v: []T
+    mut mp: map[str]any
+}
+
+fn NewSet[T](arr: []T): &Set[T]{
+    let mut v = make([]T,0,len(arr))
+    let mut mp:map[str]any = {}
+    let mut set = &Set[T]{v,mp}
+    for _,item in arr {
+        if !set.Contain(item){
+            set.Push(item)
+        }
+    }
+    ret set
+}
+
+impl Set{
+    // TODO: handle if T has String() function
+    fn key(*self, item: T):str{
+        ret fmt::Sprint(item)
+    }
+  
+    fn Contain(*self, item:T):bool{
+        k:= self.key(item)
+        let (_,ok)=self.mp[k]
+        ret ok
+    }
+
+    fn Push(*self,item:T){
+        self.v= append(self.v,item)
+        k:= self.key(item)
+        self.mp[k]=nil
+    }
+    
+    fn Get(*self, i: int): T{
+        if i>=len(self.v){
+            let tmp:T
+            ret tmp
+        }
+        ret self.v[i]
+    }
+}
