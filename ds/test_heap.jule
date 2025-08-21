@@ -3,28 +3,31 @@ use "std/fmt"
 
 #test
 fn testHeap(t: &testing::T){
-    let mut mySlice:[]int = [90, 32, 6, 53]
+    let mut mySlice:[]int = [1, 3, 2, 4]
     let mut lessFn: fn(arr: []int, x: int, y: int):bool
     lessFn = fn|arr,i,j| arr[i] < arr[j]
     h:= NewHeap(mySlice,lessFn)
-    fmt::Println(mySlice)
-    fmt::Println(h.arr)
-    h.Push(1)
-    fmt::Println(h.arr)
-    
-    h.Pop()
-    fmt::Println(h.arr)
+    h.Push(5)
+    t.Assert(h.Len() == 5, "heap size is not match")
+    let mut x = 1
+    for h.Len()>0{
+        top:= h.Pop()        
+        t.Assert(top==x, "the top of heap is not match")
+        x++
+    }
 }
 struct Foo{
-       v: int
+   v: int
 }
 #test
 fn testHeapWithStruct(t: &testing::T){
-    
-    let mut items: []Foo=[Foo{1},Foo{7},Foo{5},Foo{4}]
+    let mut items: []Foo=[Foo{1},Foo{3},Foo{2},Foo{4}]
     let lessFn: fn(arr: []Foo,i:int,j:int):bool = fn|arr,i,j| arr[i].v < arr[j].v
     h:=NewHeap(items, lessFn)
-    fmt::Println(h.arr)
-    h.Pop()
-    fmt::Println(h.arr)
+    let mut x = 1
+    for h.Len()>0{
+        top:= h.Pop()        
+        t.Assert(top.v==x, "the top of heap is not match")
+        x++
+    }
 }

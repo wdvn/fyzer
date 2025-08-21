@@ -1,7 +1,8 @@
 use "std/fmt"
 
 struct Matrix[T] {
-    matrix: [][]T
+   mut matrix: [][]T
+   mut forEachFn: fn (T,int,int)
 }
 
 fn NewMatrix[T](n:int,m:int): &Matrix[T]{
@@ -10,8 +11,9 @@ fn NewMatrix[T](n:int,m:int): &Matrix[T]{
     for i<n;i++{
         matrix = append(matrix ,make([]T,m,m))
     }
-    ret &Matrix[T]{matrix}
+    ret &Matrix[T]{matrix,nil}
 }
+
 
 impl Matrix {
     fn Print(*self) {
@@ -25,6 +27,14 @@ impl Matrix {
     	for _, row in self.matrix {
     		result = append(result, CloneSlice(row))
     	}
-    	ret &Matrix[T]{result}
+    	ret &Matrix[T]{result,nil}
+    }
+    
+    fn ForEach(*self){
+        for i,row in self.matrix{
+            for j,_ in row{
+                self.forEachFn(self.matrix[i][j],i,j)
+            }
+        }
     }
 }

@@ -2,6 +2,12 @@ use "std/testing"
 
 #test
 fn testInitMatrix(t: &testing::T){
-    mx:= NewMatrix[int](4,4)
-    mx.Print()
+   mut mx:= NewMatrix[int](2,2)
+    let mut x=0
+    let mut each= fn (n:int,i:int,j:int){
+        mx.matrix[i][j]=x
+        x++
+    }
+    mx.forEachFn =each
+    mx.ForEach()
 }
