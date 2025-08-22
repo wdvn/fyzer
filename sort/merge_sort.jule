@@ -1,0 +1,42 @@
+use "std/fmt"
+
+fn min(a:int, b:int):int{
+    if a>b{ret b}
+    ret a
+}
+
+// Merge two sorted array to new array
+fn merge[T: numeric](arr1: []T,arr2:[]T): []T{
+    let mut out = make([]T,0, len(arr1)+len(arr2))
+    let mut i = 0
+    let mut j = 0
+    length:= min(len(arr1)-1, len(arr2)-1)
+    for i<length && j<length{
+        if arr1[i]<arr2[j]{
+            out=append(out,arr1[i])
+            i++
+        }else{
+            out=append(out,arr2[j])
+            j++
+        }
+    }
+    for i<len(arr1){
+        out=append(out,arr1[i])
+        i++
+    }
+    for j<len(arr2){
+        out=append(out,arr2[j])
+        j++
+    }
+    ret out
+}
+
+fn MergeSort[T: numeric](mut arr: []T): []T{
+    if len(arr) < 2{
+        ret arr
+    }
+    mid:=len(arr)/2
+    l:= MergeSort(arr[:mid])
+    r:= MergeSort(arr[mid:])
+    ret merge(l,r)
+}

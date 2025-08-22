@@ -1,0 +1,11 @@
+use "std/testing"
+use "std/fmt"
+#test
+fn testInsertSort(t: &testing::T){
+    let mut input= [1,3,5,4,6,2,7,8,9]
+    input = InsertSort[int](input,false) 
+    fmt::Println(input)
+    
+    input = InsertSort[int](input,true) 
+    fmt::Println(input)
+}
