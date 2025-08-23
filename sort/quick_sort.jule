@@ -1,0 +1,27 @@
+
+fn partition(mut arr:[]int,l:int,r:int):int{
+    x:= arr[r]
+    let mut i = l - 1
+    mut j := l
+    for  j<r;j++{
+        if arr[j] < x {
+            i = i+1
+            arr[i],arr[j] = arr[j],arr[i]
+        }
+    }
+    arr[i+1],arr[r] = arr[r],arr[i+1]
+    //return the index of pirot
+    ret i+1
+}
+
+fn _quickSort(mut arr:[]int,l:int,r:int){
+    if l<r{
+        pirot:= partition(arr,l,r)
+        _quickSort(arr,l,pirot-1)
+        _quickSort(arr,pirot+1,r)
+    }
+}
+fn QuickSort(mut arr: []int): []int{
+    _quickSort(arr,0,len(arr)-1)
+    ret arr
+}

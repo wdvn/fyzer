@@ -1,0 +1,12 @@
+use "fyzer/ds"
+
+fn HeapSort(mut arr: []int): []int{
+    let mut out = make([]int, 0, len(arr))
+    let mut lessFn: fn(arr: []int, x: int, y: int):bool
+    lessFn = fn|arr,i,j| arr[i] < arr[j]
+    h:= ds::NewHeap[int, fn([]int, int, int):bool](arr, lessFn)
+    for h.Len() > 0 {
+        out=append(out,h.Pop())
+    } 
+    ret out
+}

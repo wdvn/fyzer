@@ -1,0 +1,9 @@
+use "std/fmt"
+use "std/testing"
+
+#test
+fn testHeapSort(t: &testing::T){
+    mut n:=[1,2,4,5,6,3,9,7,8]
+    out:= HeapSort(n)
+    fmt::Println(out)
+}

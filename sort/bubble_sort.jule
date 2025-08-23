@@ -1,0 +1,15 @@
+/* BubbleSort: swap inorder 2 element
+*/
+fn BubbleSort(mut arr: []int): []int{
+    let mut j = 0
+    for i in arr{
+        j = len(arr) -1
+        for j>i;j--{
+            if arr[j] < arr[i]{
+                //swap
+                arr[i],arr[j] = arr[j],arr[i]
+            }
+        }
+    }
+    ret arr
+}
